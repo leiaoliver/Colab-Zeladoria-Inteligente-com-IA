@@ -277,25 +277,3 @@ colab-zeladoria-ai/
 ├── pnpm-workspace.yaml      # Configuração monorepo
 └── README.md
 ```
-
-## Troubleshooting
-
-### Problema: "GROQ_API_KEY não configurada"
-- **Solução**: Obtenha uma chave gratuita em https://console.groq.com/keys
-- Adicione no arquivo `apps/backend/.env`
-
-### Problema: Erro de conexão com banco
-- **Solução**: Verifique se o PostgreSQL está rodando com `docker-compose up -d`
-- Confira a `DATABASE_URL` no `.env`
-
-### Problema: Porta já em uso
-- **Backend (3000)**: Mude `PORT=3001` no `.env` do backend
-- **Frontend (3001)**: Use `pnpm dev -- -p 3002` ou mude no package.json
-
-### Problema: Testes travando
-- **Solução**: Os testes usam `forceExit`, avisos sobre worker processes são normais
-
----
-
-**Desenvolvido por:** Léia Oliveira
-**Desafio:** Colab - Zeladoria Inteligente com IA 
