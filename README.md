@@ -1,4 +1,4 @@
-# Colab Zeladoria - Triagem Inteligente
+# Colab - Zeladoria Inteligente com IA
 
 Sistema de triagem automatizada de solicitações urbanas usando IA generativa.
 
