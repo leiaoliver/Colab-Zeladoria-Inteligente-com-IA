@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import Groq from 'groq-sdk';
 import {
   AIAnalysisDto,
@@ -12,11 +12,12 @@ import {
 } from './prompts/report-triage.prompt';
 
 @Injectable()
-export class AIService {
+export class AIService implements OnModuleDestroy {
   private readonly logger = new Logger(AIService.name);
   private readonly groq: Groq;
   private readonly maxRetries = 3;
   private readonly retryDelay = 1000; // 1 segundo
+  private activeTimers: Set<NodeJS.Timeout> = new Set();
 
   constructor() {
     const apiKey = process.env.GROQ_API_KEY;
@@ -153,6 +154,29 @@ export class AIService {
    * Helper para delay entre retries
    */
   private sleep(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+    return new Promise((resolve) => {
+      const timer = setTimeout(() => {
+        this.activeTimers.delete(timer);
+        resolve();
+      }, ms);
+      
+      timer.unref(); // Permite que o processo termine mesmo com timer ativo
+      this.activeTimers.add(timer);
+    });
+  }
+
+  /**
+   * Cleanup quando o módulo for destruído
+   */
+  async onModuleDestroy() {
+    this.logger.log('🧹 Limpando recursos do AI Service...');
+    
+    // Limpa todos os timers ativos
+    for (const timer of this.activeTimers) {
+      clearTimeout(timer);
+    }
+    this.activeTimers.clear();
+    
+    this.logger.log('✅ AI Service limpo');
   }
 }

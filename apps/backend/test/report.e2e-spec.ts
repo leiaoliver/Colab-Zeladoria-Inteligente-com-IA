@@ -4,6 +4,7 @@ import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
+import { AIService } from '../src/ai/ai.service';
 
 interface ReportResponse {
   id: string;
@@ -21,6 +22,7 @@ interface ReportResponse {
 describe('Report API (e2e)', () => {
   let app: INestApplication<App>;
   let prisma: PrismaService;
+  let aiService: AIService;
 
   beforeAll(async () => {
     process.env.GROQ_API_KEY =
@@ -51,10 +53,15 @@ describe('Report API (e2e)', () => {
     await app.init();
 
     prisma = app.get<PrismaService>(PrismaService);
+    aiService = app.get<AIService>(AIService);
   });
 
   afterAll(async () => {
     await prisma.report.deleteMany({});
+    if (aiService) {
+      await aiService.onModuleDestroy();
+    }
+    await prisma.$disconnect();
     await app.close();
   });
 
