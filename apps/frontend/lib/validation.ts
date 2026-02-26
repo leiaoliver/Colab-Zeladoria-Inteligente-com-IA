@@ -15,9 +15,10 @@ export const reportSchema = z.object({
   
   location: z
     .string()
-    .min(5, 'Localização deve ter pelo menos 5 caracteres')
+    .min(1, 'Se preenchida, localização deve ter pelo menos 1 caractere')
     .max(200, 'Localização deve ter no máximo 200 caracteres')
-    .trim(),
+    .trim()
+    .optional(),
 });
 
 export type ReportFormData = z.infer<typeof reportSchema>;

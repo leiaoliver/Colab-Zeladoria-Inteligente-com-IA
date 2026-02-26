@@ -11,6 +11,6 @@ export class CreateReportDto {
 
   @IsOptional()
   @IsString()
-  @MinLength(5)
+  @MinLength(1)
   location?: string;
 }

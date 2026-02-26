@@ -80,8 +80,8 @@ Aplicação fullstack que recebe relatos de problemas urbanos em texto livre, pr
 
 **1. Clonar repositório:**
 ```bash
-git clone https://github.com/seu-usuario/colab-zeladoria-ai.git
-cd colab-zeladoria-ai
+git clone https://github.com/leiaoliver/Colab-Zeladoria-Inteligente-com-IA.git
+cd Colab-Zeladoria-Inteligente-com-IA
 ```
 
 **2. Configurar variáveis de ambiente:**
@@ -121,8 +121,7 @@ pnpm install
 **5. Rodar migrations:**
 ```bash
 cd apps/backend
-pnpm exec prisma migrate deploy
-pnpm exec prisma generate
+pnpm exec prisma migrate dev
 cd ../..
 ```
 
