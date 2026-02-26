@@ -97,6 +97,7 @@ DATABASE_URL="postgresql://admin:admin@localhost:5432/zeladoria"
 GROQ_API_KEY=gsk_sua_chave_aqui
 NODE_ENV=development
 PORT=3000
+CORS_ORIGIN=http://localhost:3001
 ```
 
 Frontend - `apps/frontend/.env.local`:
@@ -156,6 +157,20 @@ Principais cenários cobertos:
 - Listagem de relatos (GET /report)
 - Busca de relato por ID (GET /report/:id)
 - Validação de entrada e CORS
+
+### Outros comandos úteis:
+```bash
+# Lint e formatação
+cd apps/backend
+pnpm lint          # ESLint com correções automáticas
+pnpm format        # Prettier
+
+# Visualizar dados do banco
+pnpm exec prisma studio  # Interface web para o banco
+
+# Resetar banco (desenvolvimento)
+pnpm exec prisma migrate reset
+```
 
 ## Docker
 
@@ -221,6 +236,7 @@ Resposta (201):
 | `GROQ_API_KEY` | API key do Groq Cloud | `gsk_...` |
 | `NODE_ENV` | Ambiente de execução | `development` ou `production` |
 | `PORT` | Porta do servidor | `3000` |
+| `CORS_ORIGIN` | Origem permitida para CORS | `http://localhost:3001` |
 
 ### Frontend (`.env.local`)
 
@@ -261,6 +277,23 @@ colab-zeladoria-ai/
 ├── pnpm-workspace.yaml      # Configuração monorepo
 └── README.md
 ```
+
+## Troubleshooting
+
+### Problema: "GROQ_API_KEY não configurada"
+- **Solução**: Obtenha uma chave gratuita em https://console.groq.com/keys
+- Adicione no arquivo `apps/backend/.env`
+
+### Problema: Erro de conexão com banco
+- **Solução**: Verifique se o PostgreSQL está rodando com `docker-compose up -d`
+- Confira a `DATABASE_URL` no `.env`
+
+### Problema: Porta já em uso
+- **Backend (3000)**: Mude `PORT=3001` no `.env` do backend
+- **Frontend (3001)**: Use `pnpm dev -- -p 3002` ou mude no package.json
+
+### Problema: Testes travando
+- **Solução**: Os testes usam `forceExit`, avisos sobre worker processes são normais
 
 ---
 

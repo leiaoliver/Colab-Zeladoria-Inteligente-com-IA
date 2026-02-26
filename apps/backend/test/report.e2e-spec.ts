@@ -57,12 +57,28 @@ describe('Report API (e2e)', () => {
   });
 
   afterAll(async () => {
-    await prisma.report.deleteMany({});
-    if (aiService) {
-      await aiService.onModuleDestroy();
+    // Limpeza de dados primeiro
+    try {
+      await prisma.report.deleteMany({});
+    } catch {
+      // Ignora erros se DB já desconectado
     }
-    await prisma.$disconnect();
-    await app.close();
+
+    // Cleanup de serviços
+    if (aiService) {
+      aiService.onModuleDestroy();
+    }
+
+    // Desconexão e fechamento
+    if (prisma) {
+      await prisma.$disconnect();
+    }
+    if (app) {
+      await app.close();
+    }
+
+    // Pequeno delay para garantir cleanup completo
+    await new Promise((resolve) => setTimeout(resolve, 100));
   });
 
   afterEach(async () => {

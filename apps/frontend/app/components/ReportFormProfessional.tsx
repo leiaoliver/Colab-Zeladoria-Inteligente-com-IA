@@ -345,7 +345,7 @@ export default function ReportFormProfessional({ onSuccess }: ReportFormProps) {
                   className={cn(
                     "transition-all duration-200",
                     errors.location && "border-red-500 focus:ring-red-500",
-                    !errors.location && touchedFields.location && locationValue?.length >= 5 && "border-green-500"
+                    !errors.location && touchedFields.location && (locationValue?.length ?? 0) >= 5 && "border-green-500"
                   )}
                 />
                 {errors.location && (

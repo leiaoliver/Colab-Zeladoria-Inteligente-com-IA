@@ -24,8 +24,9 @@ describe('AppController (e2e)', () => {
   });
 
   afterAll(async () => {
+    // Cleanup em ordem correta
     if (aiService) {
-      await aiService.onModuleDestroy();
+      aiService.onModuleDestroy();
     }
     if (prisma) {
       await prisma.$disconnect();
@@ -33,6 +34,8 @@ describe('AppController (e2e)', () => {
     if (app) {
       await app.close();
     }
+    // Pequeno delay para garantir cleanup completo
+    await new Promise((resolve) => setTimeout(resolve, 100));
   });
 
   it('/ (GET)', () => {

@@ -159,24 +159,24 @@ export class AIService implements OnModuleDestroy {
         this.activeTimers.delete(timer);
         resolve();
       }, ms);
-      
-      timer.unref(); // Permite que o processo termine mesmo com timer ativo
+
+      timer.unref();
       this.activeTimers.add(timer);
     });
   }
 
-  /**
-   * Cleanup quando o módulo for destruído
-   */
-  async onModuleDestroy() {
+  onModuleDestroy() {
     this.logger.log('🧹 Limpando recursos do AI Service...');
-    
-    // Limpa todos os timers ativos
+
     for (const timer of this.activeTimers) {
       clearTimeout(timer);
     }
     this.activeTimers.clear();
-    
+
+    if (this.groq) {
+      this.logger.debug('Groq SDK cleanup concluído');
+    }
+
     this.logger.log('✅ AI Service limpo');
   }
 }
